@@ -13,15 +13,18 @@ SlashCmdList["CT"] = function(msg)
 	setTarget()
 end 
 
+function callTarget:OnInitialize()
+	self:RegisterComm("14ae3c00985a1a89");
+end
+
 function callTarget:OnEnable()
     -- Subscribe to callbacks
     self:LNR_RegisterCallback("LNR_ON_NEW_PLATE");
     self:LNR_RegisterCallback("LNR_ON_RECYCLE_PLATE");
-	self:RegisterComm("calltargetprefix");
 end
 
 function callTarget:OnDisable()
-    -- Unsubscribe to callbacks
+    -- Unsubscribe to callbacks	
     self:LNR_UnregisterAllCallbacks();
 end
 
@@ -29,7 +32,12 @@ end
 function setTarget()
 	if UnitExists("target") then
 		target = UnitGUID("target")
-		callTarget:SendCommMessage("calltargetprefix", target, "RAID") --broadcast the selected target
+		if IsInInstance() then
+			callTarget:SendCommMessage("14ae3c00985a1a89", target, "INSTANCE_CHAT") --broadcast the selected target
+		else
+			callTarget:SendCommMessage("14ae3c00985a1a89", target, "RAID") --broadcast the selected target
+		end
+		
 	end
 end
 
