@@ -38,7 +38,7 @@ function setTarget()
 			callTarget:SendCommMessage("14ae3c00985a1a89", target, "RAID") --broadcast the selected target
 		end
 		
-	end
+	elseif lastNameplate then lastNameplate.myIndicator:Hide() end
 end
 
 --put the marker on target's nameplate
