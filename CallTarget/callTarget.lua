@@ -1,6 +1,6 @@
 ---------------------------------------------------------------------------
 --declaring addon stuff----------------------------------------------------
-callTarget = LibStub("AceAddon-3.0"):NewAddon("callTarget", "AceComm-3.0", "AceEvent-3.0", "LibNameplateRegistry-1.0");
+callTarget = LibStub("AceAddon-3.0"):NewAddon("callTarget", "AceComm-3.0", "LibNameplateRegistry-1.0");
 ---------------------------------------------------------------------------
 --globals
 target = nil
