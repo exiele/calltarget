@@ -4,13 +4,22 @@ callTarget = LibStub("AceAddon-3.0"):NewAddon("callTarget", "AceComm-3.0", "LibN
 ---------------------------------------------------------------------------
 --globals
 target = nil
+lasttarget = nil
 lastNameplate = nil
+lastNameplate2 = nil
+markernumber = nil
+lastmarkernumber = nil
 
 
---slash command
+--slash commands
 SLASH_CT1 = "/calltarget"
 SlashCmdList["CT"] = function(msg)
-	setTarget()
+	if msg == '2' then
+	setTarget("2")
+  else
+	setTarget("1")
+  end
+	
 end 
 
 function callTarget:OnInitialize()
@@ -28,19 +37,33 @@ function callTarget:OnDisable()
     self:LNR_UnregisterAllCallbacks();
 end
 
---set the call target 
-function setTarget()
+--call target 
+function setTarget(markernumber)
 	if UnitExists("target") then
+		lasttarget = target
 		target = UnitGUID("target")
-		if IsInInstance() then
-			callTarget:SendCommMessage("14ae3c00985a1a89", target, "INSTANCE_CHAT") --broadcast the selected target
+		if target == lasttarget then
+			removemarker(markernumber)
 		else
-			callTarget:SendCommMessage("14ae3c00985a1a89", target, "RAID") --broadcast the selected target
+			target = target .. markernumber
+			if IsInInstance() then
+				callTarget:SendCommMessage("14ae3c00985a1a89", target, "INSTANCE_CHAT") --broadcast the selected target
+			else
+				callTarget:SendCommMessage("14ae3c00985a1a89", target, "RAID") --broadcast the selected target
+			end
 		end
-		
-	elseif lastNameplate then lastNameplate.myIndicator:Hide() end
+	elseif lastNameplate then 
+		removemarker(markernumber)
+	end
 end
-
+-- remove marker
+function removemarker(markernumber)
+	if IsInInstance() then
+		callTarget:SendCommMessage("14ae3c00985a1a89", "0" .. markernumber, "INSTANCE_CHAT") --broadcast clear
+	else
+		callTarget:SendCommMessage("14ae3c00985a1a89", "0" .. markernumber, "RAID") --broadcast clear
+	end
+end
 --put the marker on target's nameplate
 function callTarget:LNR_ON_NEW_PLATE(eventname, plateFrame, plateData)
 	
@@ -49,16 +72,36 @@ function callTarget:LNR_ON_NEW_PLATE(eventname, plateFrame, plateData)
 		
 			if not plateFrame.myIndicator then
 				plateFrame.myIndicator = plateFrame:CreateTexture(nil, "OVERLAY")
-				plateFrame.myIndicator:SetTexture("Interface\\AddOns\\CallTarget\\marker.tga")
 				plateFrame.myIndicator:SetSize(60,60)
 				plateFrame.myIndicator:SetPoint("TOP", 0, 40)
+				
 			end
+			if lastmarkernumber ~= markernumber then
+				if markernumber == "1" then
+					plateFrame.myIndicator:SetTexture("Interface\\AddOns\\CallTarget\\marker.tga")
+				else
+					plateFrame.myIndicator:SetTexture("Interface\\AddOns\\CallTarget\\marker2.tga")
+				end
+				plateFrame.myIndicator:Show()
+			else
 			plateFrame.myIndicator:Show()
-			if lastNameplate and lastNameplate ~=plateFrame then 
-				lastNameplate.myIndicator:Hide() 
 			end
-			lastNameplate = plateFrame
+			if markernumber == "1" then
+				if lastNameplate and lastNameplate ~=plateFrame then 
+					lastNameplate.myIndicator:Hide() 
+				end
+				lastNameplate = plateFrame
+			else
+				if lastNameplate2 and lastNameplate2 ~=plateFrame then 
+					lastNameplate2.myIndicator:Hide() 
+				end
+				lastNameplate2 = plateFrame
+			end			
 		end
+	elseif markernumber == "2" then
+		lastNameplate2.myIndicator:Hide()
+	else
+		lastNameplate.myIndicator:Hide()
 	end
 end
 
@@ -70,7 +113,8 @@ end
 
 -- process the broadcasted message
 function callTarget:OnCommReceived(prefix, message, distribution, sender)
-    target = message
+	target = message:sub(0,string.len(message)-1)
+    markernumber = string.sub(message, -1)
 	plateFrame, plateData = callTarget:GetPlateByGUID(target)
 	callTarget:LNR_ON_NEW_PLATE( _, plateFrame, plateData)
 end
