@@ -1,0 +1,22 @@
+package-as: Call-Target
+
+externals:
+    Libs/AceAddon-3.0:
+        url: https://repos.wowace.com/wow/ace3/trunk/AceAddon-3.0
+        tag: latest
+    Libs/LibStub:
+        url: https://repos.wowace.com/wow/libstub/trunk
+        tag: latest
+    Libs/CallbackHandler-1.0:
+        url: https://repos.wowace.com/wow/callbackhandler/trunk/CallbackHandler-1.0
+        tag: latest
+    Libs/AceComm-3.0: 
+        url: https://repos.curseforge.com/wow/ace3/trunk/AceComm-3.0
+        tag: latest
+    Libs/LibNameplateRegistry-1.0: 
+        url: git://git.wowace.com/wow/libnameplateregistry-1-0/mainline.git/LibNameplateRegistry-1.0
+        tag: latest
+
+    
+    
+enable-nolib-creation: no
