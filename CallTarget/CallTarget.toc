@@ -1,6 +1,6 @@
 ## Interface: 90005
 ## Title: Call Target
 ## Author: Exidan-Nemesis/Exidan-TolBarad
-## Version: 0.8
+## Version: 0.9
 embeds.xml
 CallTarget.lua
