@@ -10,7 +10,7 @@ externals:
     CallTarget/Libs/AceComm-3.0: 
         url: https://repos.curseforge.com/wow/ace3/trunk/AceComm-3.0
     CallTarget/Libs/LibNameplateRegistry-1.0:
-        url: git://github.com/2072/LibNameplateRegistry-1.0.git
+        url: git://git.wowace.com/wow/libnameplateregistry-1-0/mainline.git/LibNameplateRegistry-1.0
         
 move-folders:
   CallTarget/CallTarget: CallTarget
